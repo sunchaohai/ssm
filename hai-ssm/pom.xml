@@ -4,6 +4,7 @@
   	<groupId>hai.chao.sun.parent</groupId>
 	<artifactId>hai-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<relativePath>..\hai-parent\pom.xml</relativePath>
   </parent>
   <groupId>hai.chao.sun.ssm</groupId>
   <artifactId>hai-ssm</artifactId>
@@ -124,7 +125,6 @@
 		<artifactId>commons-lang3</artifactId>
 	</dependency>
   </dependencies>
-<<<<<<< HEAD
   
   <build>
 		<plugins>
@@ -138,7 +138,4 @@
 			</plugin>
 		</plugins>
 	</build>
-  
-=======
->>>>>>> b0457dce655a8125c0add3d1569ed5e7a693b361
 </project>
