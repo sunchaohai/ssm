@@ -1,0 +1,34 @@
+package com.hai.chao.sun.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.hai.chao.sun.service.UserService;
+import com.hai.chao.sun.vo.EasyUiPageResult;
+
+@Controller
+@RequestMapping("user")
+public class UserController {
+	@Autowired
+	private UserService userService;
+	
+	@RequestMapping("/page")
+	public ModelAndView toUsers() {
+		return new ModelAndView("users");
+	}
+	
+	@RequestMapping("/list")
+	@ResponseBody
+	public EasyUiPageResult listUser(@RequestParam(value="page",defaultValue="1")Integer pageNum,
+			@RequestParam(value="rows",defaultValue="1")Integer pageSize) {
+		EasyUiPageResult uiPage = new EasyUiPageResult();
+		uiPage = userService.querAllUser(pageNum,pageSize);		
+		return uiPage;
+	}
+
+}

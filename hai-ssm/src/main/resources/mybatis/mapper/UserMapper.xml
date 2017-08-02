@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--   mapper文件的namespace,理论上可以随意命名,
+ 	   如果想使用动态代理，那么 namespace必须等于接口的全路径
+ -->
+<mapper namespace="com.hai.chao.sun.mapper.UserMapper">
+  	<!-- 分页查询所有用户 -->
+ 	<select id="querAllUser" resultType="User">
+ 		select * from tb_user
+ 	</select>
+</mapper>
