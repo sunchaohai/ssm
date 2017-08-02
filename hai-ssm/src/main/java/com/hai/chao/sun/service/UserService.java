@@ -4,6 +4,6 @@ import com.hai.chao.sun.vo.EasyUiPageResult;
 
 public interface UserService {
 
-	EasyUiPageResult querAllUser(Integer pageNum, Integer pageSize);
+    EasyUiPageResult querAllUser(Integer pageNum, Integer pageSize);
 
 }

@@ -2,6 +2,8 @@ package com.hai.chao.sun.pojo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class User {
 	private String id;
 	private String userName;
@@ -11,6 +13,8 @@ public class User {
 	private Date birthday;
 	private Date created;
 	private Date updated;
+	@JsonIgnore//转换成json时，忽略该属性内容   
+	private String password;
 	public String getId() {
 		return id;
 	}
@@ -59,7 +63,15 @@ public class User {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	@Override
+	
+	
+	public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    @Override
 	public String toString() {
 		return "User [id=" + id + ", userName=" + userName + ", name=" + name + ", age=" + age + ", sex=" + sex
 				+ ", birthday=" + birthday + ", created=" + created + ", updated=" + updated + "]";

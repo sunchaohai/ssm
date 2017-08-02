@@ -25,10 +25,8 @@ public class UserController {
 	@RequestMapping("/list")
 	@ResponseBody
 	public EasyUiPageResult listUser(@RequestParam(value="page",defaultValue="1")Integer pageNum,
-			@RequestParam(value="rows",defaultValue="1")Integer pageSize) {
-		EasyUiPageResult uiPage = new EasyUiPageResult();
-		uiPage = userService.querAllUser(pageNum,pageSize);		
-		return uiPage;
+			@RequestParam(value="rows",defaultValue="5")Integer pageSize) {
+		return userService.querAllUser(pageNum,pageSize);
 	}
 
 }
