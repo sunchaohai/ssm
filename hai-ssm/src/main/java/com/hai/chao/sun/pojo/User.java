@@ -2,6 +2,8 @@ package com.hai.chao.sun.pojo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class User {
@@ -15,6 +17,7 @@ public class User {
 
     private Integer sex;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
     private Date created;
