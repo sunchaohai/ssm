@@ -20,11 +20,14 @@
 		<property name="prefix" value="/WEB-INF/views/"></property>
 		<!-- 后缀 -->
 		<property name="suffix" value=".jsp"></property>
+		<property name="order" value="2"></property>
 	</bean>
 	<!-- 配置第二个视图解析器 -->
 	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<property name="order" value="1"></property>
 	</bean>
+	<!-- 定义Excel视图对象，并指定视图名称 -->
+	<bean name="excelView" class="com.hai.chao.sun.vo.UserExcelView"></bean>
 
 	<!-- 定义文件上传解析器 -->
 	<bean id="multipartResolver"
