@@ -102,11 +102,13 @@ var toolbar = [{
     	var optins = $("#userList").datagrid("getPager").data("pagination").options;
     	var page = optins.pageNumber;
     	var rows = optins.pageSize;
-    	$("<form>").attr({
+    	var $form = $("<form></form>");
+    	$(document.body).append($form);
+    	$form.attr({
     		"action":"/user/export/excel",
     		"method":"POST"
-    	}).append("<input type='text' name='page' value='"+page+"'/>")
-    	.append("<input type='text' name='rows' value='"+rows+"'/>").submit();
+    	}).append("<input type='hidden' name='page' value='"+page+"'/>")
+    	.append("<input type='hidden' name='rows' value='"+rows+"'/>").submit();
     }
 }];
 </script>

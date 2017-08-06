@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService{
 	private UserMapper userMapper;
 
 	@Override
-	public EasyUiPageResult querAllUser(Integer pageNum, Integer pageSize) {
-		EasyUiPageResult uiPage = new EasyUiPageResult();
+	public EasyUiPageResult<User> querAllUser(Integer pageNum, Integer pageSize) {
+		EasyUiPageResult<User> uiPage = new EasyUiPageResult<User>();
 		//开启分页查询
 		PageHelper.startPage(pageNum, pageSize);
 		
