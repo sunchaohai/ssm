@@ -78,7 +78,6 @@ var toolbar = [{
     text:'删除',
     iconCls:'icon-cancel',
     handler:function(){
-    	debugger;
     	var ids = getSelectionsIds();
     	console.log(ids);
     	if(ids.length == 0){

@@ -97,10 +97,10 @@ public class UserController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Response saveuser(@RequestBody String ids) {
+    public Response saveuser(@RequestParam("ids") String ids) {
         try {
             ids = URLDecoder.decode(ids, "iso8859-1");
-            LOGGER.info("用户ids:", ids);
+            LOGGER.info("用户ids:{}", ids);
             if (StringUtils.isBlank(ids)) {
                 return Response.fail("参数有误！");
             }
