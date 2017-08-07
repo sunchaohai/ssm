@@ -6,7 +6,8 @@ import com.hai.chao.sun.pojo.User;
 
 public interface UserMapper {
 
-	List<User> querAllUser();
+    public List<User> querAllUser();
 
+    public Integer saveUser(User user);
 
 }

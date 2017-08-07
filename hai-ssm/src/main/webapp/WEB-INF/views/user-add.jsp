@@ -46,14 +46,15 @@
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
 		}
-		$.post("/user/save.action",$("#content").serialize(), function(data){
-			if(data.status == 200){
-				$.messager.alert('提示','新增会员成功!');
+		$.post("/user/save",$("#content").serialize(), function(data){
+			debugger;
+			if(data.status == 1){
+				$.messager.alert('提示',data.msg);
 				$('#userAdd').window('close');
 				$("#userList").datagrid("reload");
 				clearForm();
 			}else{
-				$.messager.alert('提示','新增会员失败!');
+				$.messager.alert('提示',data.msg);
 			}
 		});
 	}
