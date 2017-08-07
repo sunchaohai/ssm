@@ -10,4 +10,6 @@ public interface UserMapper {
 
     public Integer saveUser(User user);
 
+    public Integer deleteUsers(Integer[] idArr);
+
 }

@@ -1,5 +1,6 @@
 package com.hai.chao.sun.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,24 @@ public class UserServiceImpl implements UserService{
         return userMapper.saveUser(user);
         
     }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public Integer deleteUsers(String ids) {
+        Integer[] idArr = getIntegerArr(ids);
+        
+        return userMapper.deleteUsers(idArr);
+    }
+
+    private Integer[] getIntegerArr(String ids) {
+        Integer[] arr = new Integer[ids.length()];
+        String[] idsArrStr = ids.split(",");
+        for (int i = 0; i<idsArrStr.length; i++) {
+            String id = idsArrStr[i];
+            arr[i]=Integer.valueOf(id);
+        }
+        return arr;
+    }
+
 
 }

@@ -78,7 +78,9 @@ var toolbar = [{
     text:'删除',
     iconCls:'icon-cancel',
     handler:function(){
+    	debugger;
     	var ids = getSelectionsIds();
+    	console.log(ids);
     	if(ids.length == 0){
     		$.messager.alert('提示','未选中用户!');
     		return ;
@@ -86,10 +88,12 @@ var toolbar = [{
     	$.messager.confirm('确认','确定删除ID为 '+ids+' 的会员吗？',function(r){
     	    if (r){
             	$.post("/user/delete",{'ids':ids}, function(data){
-        			if(data.status == 200){
-        				$.messager.alert('提示','删除会员成功!',undefined,function(){
+        			if(data.status == 1){
+        				$.messager.alert('提示',data.msg,undefined,function(){
         					$("#userList").datagrid("reload");
         				});
+        			}else{
+        				$.messager.alert('提示',data.msg);
         			}
         		});
     	    }

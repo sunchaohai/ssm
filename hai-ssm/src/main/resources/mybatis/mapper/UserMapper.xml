@@ -35,4 +35,13 @@
 		);
 
 	</insert>
+	
+	
+	<delete id="deleteUsers" >
+		delete from tb_user where id in
+		<foreach collection="list" index="index" item="item"
+            open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
 </mapper>

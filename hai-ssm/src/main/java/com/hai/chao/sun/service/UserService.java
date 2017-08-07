@@ -1,5 +1,7 @@
 package com.hai.chao.sun.service;
 
+import java.util.List;
+
 import com.hai.chao.sun.pojo.User;
 import com.hai.chao.sun.vo.EasyUiPageResult;
 
@@ -19,5 +21,8 @@ public interface UserService {
      * @return 
      */
     public Integer saveUser(User user);
+
+    public Integer deleteUsers(String ids);
+
 
 }

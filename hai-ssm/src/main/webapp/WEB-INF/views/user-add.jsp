@@ -47,7 +47,6 @@
 			return ;
 		}
 		$.post("/user/save",$("#content").serialize(), function(data){
-			debugger;
 			if(data.status == 1){
 				$.messager.alert('提示',data.msg);
 				$('#userAdd').window('close');
