@@ -19,12 +19,12 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
 
     @Override
-    public EasyUiPageResult<User> querAllUser(Integer pageNum, Integer pageSize) {
+    public EasyUiPageResult<User> queryAllUser(Integer pageNum, Integer pageSize) {
         EasyUiPageResult<User> uiPage = new EasyUiPageResult<User>();
         // 开启分页查询
         PageHelper.startPage(pageNum, pageSize);
 
-        List<User> users = userMapper.querAllUser();
+        List<User> users = userMapper.queryAllUser();
         PageInfo<User> pageInfo = new PageInfo<>(users);
         uiPage.setRows(users);
         uiPage.setTotal(pageInfo.getTotal());
@@ -55,6 +55,12 @@ public class UserServiceImpl implements UserService{
             arr[i]=Integer.valueOf(id);
         }
         return arr;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class}) 
+    public Integer updateUserByUserId(User user) {
+        return userMapper.updateUserByUserId(user);
     }
 
 

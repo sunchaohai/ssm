@@ -34,6 +34,49 @@
 <div id="userAdd" class="easyui-window" title="新增会员" data-options="modal:true,closed:true,iconCls:'icon-save',collapsible:false,href:'/user/page/user-add'" style="width:600px;height:400px;padding:10px;">
         
 </div>
+<div id="userEdit" class="easyui-window" title="编辑会员" data-options="modal:true,closed:true,iconCls:'icon-save',collapsible:false" style="width:600px;height:400px;padding:10px;">
+	<form id="editContent" method="post">
+	    <table cellpadding="5">
+	        <tr>
+	            <td>用户名:</td>
+	            <td>
+		          	<input type="hidden" id="editId" name="id"/> 
+	            	<input class="easyui-textbox" type="text" id="editUserName" name="userName" data-options="required:true" style="width: 280px;"></input>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td>密码:</td>
+	            <td><input class="easyui-textbox" type="password" id="editPassword" name="password" data-options="required:true" style="width: 280px;"></input></td>
+	        </tr>
+	        <tr>
+	            <td>姓名:</td>
+	            <td><input class="easyui-textbox" name="name" id="editName" data-options="validType:'length[0,150]',required:true" style="width: 280px;"></input></td>
+	        </tr>
+	        <tr>
+	            <td>年龄:</td>
+	            <td><input class="easyui-numberbox" type="text" id="editAge" name="age" data-options="min:1,max:100,precision:0,required:true" />
+	            </td>
+	        </tr>
+	        <tr>
+	            <td>性别:</td>
+	            <td>
+	            	<input class="easyui-radio" type="radio" name="sex" value="1" checked="checked"/> 男
+	            	<input class="easyui-radio" type="radio" name="sex" value="2"/> 女
+	            </td>
+	        </tr>
+	        <tr>
+	            <td>出生日期:</td>
+	            <td>
+	                <input class="easyui-datebox" id="editBirthday" type="text" name="birthday" data-options="required:true" />
+	            </td>
+	        </tr>
+	    </table>
+	</form>
+	<div style="padding:5px">
+	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
+	</div>  
+</div>
 <script type="text/javascript">
 function formatDate(val,row){
 	var now = new Date(val);
@@ -62,6 +105,11 @@ function getSelectionsIds(){
 	ids = ids.join(",");
 	return ids;
 }
+function getRowDate(){
+	var userList = $("#userList");
+	var sels = userList.datagrid("getSelections");
+	return sels[0];
+}
 var toolbar = [{
     text:'新增',
     iconCls:'icon-add',
@@ -72,7 +120,22 @@ var toolbar = [{
     text:'编辑',
     iconCls:'icon-edit',
     handler:function(){
-    	$.messager.alert('提示','该功能由学员自己实现!');
+    	var ids = getSelectionsIds();
+    	if(ids.length == 0 || ids.length >1){
+    		$.messager.alert('提示','请选择一个用户!');
+    		return ;
+    	}
+    	
+    	var data = getRowDate();
+    	console.log(data);
+    	$('#userEdit').window('open');
+		debugger;
+    	$("#editId").val(data.id);
+    	$("#editUserName").textbox("setValue",data.userName);
+    	$("#editName").textbox("setValue",data.name);
+    	$("#editAge").numberbox("setValue",data.age);
+    	$("input[name='sex'][value='"+data.sex+"']").attr("checked", true);
+    	$("#editBirthday").datebox("setValue",new Date(data.birthday).format("yyyy-MM-dd"));
     }
 },{
     text:'删除',
@@ -114,6 +177,32 @@ var toolbar = [{
     	.append("<input type='hidden' name='rows' value='"+rows+"'/>").submit();
     }
 }];
+
+var checkSubmit = false;
+function submitForm(){
+	if(checkSubmit){
+		return;
+	}
+	if(!$('#editContent').form('validate')){
+		$.messager.alert('提示','表单还未填写完成!');
+		return ;
+	}
+	$.post("/user/edit",$("#editContent").serialize(), function(data){
+		if(data.status == 1){
+			$.messager.alert('提示',data.msg);
+			$('#userEdit').window('close');
+			$("#userList").datagrid("reload");
+			clearForm();
+		}else{
+			$.messager.alert('提示',data.msg);
+		}
+	});
+	checkSubmit = true;
+}
+function clearForm(){
+	$('#editContent').form('reset');
+}
+
 </script>
 </body>
 </html>
