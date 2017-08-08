@@ -6,10 +6,12 @@ import com.hai.chao.sun.pojo.User;
 
 public interface UserMapper {
 
-    public List<User> querAllUser();
+    public List<User> queryAllUser();
 
     public Integer saveUser(User user);
 
     public Integer deleteUsers(Integer[] idArr);
+
+    public Integer updateUserByUserId(User user);
 
 }

@@ -5,7 +5,7 @@
 <!-- mapper文件的namespace,理论上可以随意命名, 如果想使用动态代理，那么 namespace必须等于接口的全路径 -->
 <mapper namespace="com.hai.chao.sun.mapper.UserMapper">
 	<!-- 分页查询所有用户 -->
-	<select id="querAllUser" resultType="User">
+	<select id="queryAllUser" resultType="User">
 		select * from tb_user order by created desc
 	</select>
 
@@ -44,4 +44,31 @@
             #{item}
         </foreach>
 	</delete>
+	
+	
+	<update id="updateUserByUserId" parameterType="User">
+		update tb_user
+		<set>
+			<if test="userName != null and userName != ''">
+				user_name = #{userName},
+			</if>
+			<if test="password != null and password != ''">
+				password = #{password},
+			</if>
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="age != null and age != ''">
+				age = #{age},
+			</if>
+			<if test="sex != null and sex != ''">
+				sex = #{sex},
+			</if>
+			<if test="birthday != null and birthday != ''">
+				birthday = #{birthday},
+			</if>
+		</set> 
+		where id = #{id}
+	
+	</update>
 </mapper>

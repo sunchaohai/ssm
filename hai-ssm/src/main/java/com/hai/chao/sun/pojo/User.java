@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class User {
-    private String id;
+    private Integer id;
 
     private String userName;
 
@@ -27,11 +27,11 @@ public class User {
     @JsonIgnore // 转换成json时，忽略该属性内容
     private String password;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,7 +1,6 @@
 package com.hai.chao.sun.web;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,7 +42,7 @@ public class UserController {
     @ResponseBody
     public EasyUiPageResult<User> listUser(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "rows", defaultValue = "5") Integer pageSize) {
-        return userService.querAllUser(pageNum, pageSize);
+        return userService.queryAllUser(pageNum, pageSize);
     }
 
     /**
@@ -59,7 +57,7 @@ public class UserController {
     public ModelAndView exportExcel(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "rows", defaultValue = "5") Integer pageSize) {
         ModelAndView mv = new ModelAndView("excelView");
-        EasyUiPageResult<User> pageResult = userService.querAllUser(pageNum, pageSize);
+        EasyUiPageResult<User> pageResult = userService.queryAllUser(pageNum, pageSize);
         List<User> users = pageResult.getRows();
         mv.addObject("userList", users);
 
@@ -92,14 +90,14 @@ public class UserController {
     /**
      * 删除用户
      * 
-     * @param ids
+     * @param ids:用户id
      * @return
      */
     @RequestMapping("/delete")
     @ResponseBody
     public Response saveuser(@RequestParam("ids") String ids) {
         try {
-            ids = URLDecoder.decode(ids, "iso8859-1");
+            //ids = URLDecoder.decode(ids, "iso8859-1");
             LOGGER.info("用户ids:{}", ids);
             if (StringUtils.isBlank(ids)) {
                 return Response.fail("参数有误！");
@@ -114,6 +112,21 @@ public class UserController {
         } catch (Exception e) {
             LOGGER.error("删除用户失败", e);
             return Response.fail("删除用户失败！");
+        }
+    }
+    
+    @RequestMapping("/edit")
+    @ResponseBody
+    public Response editUser(User user){
+        try{
+            Integer count = userService.updateUserByUserId(user);
+            if(count == 1){
+                return Response.success("修改用户成功！");
+            }else{
+                return Response.fail("修改用户失败！");
+            }
+        }catch(Exception e){
+            return Response.fail("修改用户失败！");
         }
     }
     
