@@ -149,7 +149,7 @@ var toolbar = [{
     	}
     	$.messager.confirm('确认','确定删除ID为 '+ids+' 的会员吗？',function(r){
     	    if (r){
-            	$.post("/user/delete",{'ids':ids}, function(data){
+            	$.post("/user/delete2",{'ids':ids}, function(data){
         			if(data.status == 1){
         				$.messager.alert('提示',data.msg,undefined,function(){
         					$("#userList").datagrid("reload");

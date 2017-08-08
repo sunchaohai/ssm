@@ -2,13 +2,20 @@ package com.hai.chao.sun.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Table(name = "tb_user")
 public class User {
+    @Id
     private Integer id;
 
+    @Column(name = "user_name")
     private String userName;
 
     private String name;

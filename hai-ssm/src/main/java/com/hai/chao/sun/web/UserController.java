@@ -1,6 +1,8 @@
 package com.hai.chao.sun.web;
 
 import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -95,7 +97,7 @@ public class UserController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Response saveuser(@RequestParam("ids") String ids) {
+    public Response deleteUser(@RequestParam("ids") String ids) {
         try {
             //ids = URLDecoder.decode(ids, "iso8859-1");
             LOGGER.info("用户ids:{}", ids);
@@ -104,6 +106,47 @@ public class UserController {
             }
            
             Integer count = userService.deleteUsers(ids);
+            if (count > 0) {
+                return Response.success("删除用户成功！");
+            } else {
+                return Response.fail("删除用户失败！");
+            }
+        } catch (Exception e) {
+            LOGGER.error("删除用户失败", e);
+            return Response.fail("删除用户失败！");
+        }
+    }
+    
+    /*@RequestMapping("/delete2")
+    @ResponseBody
+    public Response deleteUser2(@RequestParam("ids") Integer[] ids) {
+        try {
+            //ids = URLDecoder.decode(ids, "iso8859-1");
+            LOGGER.info("用户ids:{}", Arrays.toString(ids));
+            if (ids.length == 0 || ids == null) {
+                return Response.fail("参数有误！");
+            }
+           
+            Integer count = userService.deleteUsers2(ids);
+            if (count > 0) {
+                return Response.success("删除用户成功！");
+            } else {
+                return Response.fail("删除用户失败！");
+            }
+        } catch (Exception e) {
+            LOGGER.error("删除用户失败", e);
+            return Response.fail("删除用户失败！");
+        }
+    }*/
+    @RequestMapping("/delete2")
+    @ResponseBody
+    public Response deleteUser2(@RequestParam("ids") List<Object> ids) {
+        try {
+            if (ids.size() == 0 || ids == null) {
+                return Response.fail("参数有误！");
+            }
+           
+            Integer count = userService.deleteUsers2(ids);
             if (count > 0) {
                 return Response.success("删除用户成功！");
             } else {

@@ -36,5 +36,8 @@ public interface UserService {
      */
     public Integer updateUserByUserId(User user);
 
+//    public Integer deleteUsers2(Integer[] ids);
+    public Integer deleteUsers2(List<Object> ids);
+
 
 }

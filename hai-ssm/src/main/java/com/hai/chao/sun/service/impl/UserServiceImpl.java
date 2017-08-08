@@ -1,21 +1,27 @@
 package com.hai.chao.sun.service.impl;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.parsing.ParsingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.abel533.entity.Example;
+import com.github.abel533.entity.Example.Criteria;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hai.chao.sun.mapper.UserMapper;
+import com.hai.chao.sun.mapper.UserMapperCommon;
 import com.hai.chao.sun.pojo.User;
 import com.hai.chao.sun.service.UserService;
 import com.hai.chao.sun.vo.EasyUiPageResult;
 
 @Service
 public class UserServiceImpl implements UserService{
-    @Autowired
+    /*@Autowired
     private UserMapper userMapper;
 
     @Override
@@ -61,6 +67,56 @@ public class UserServiceImpl implements UserService{
     @Transactional(rollbackFor = {Exception.class}) 
     public Integer updateUserByUserId(User user) {
         return userMapper.updateUserByUserId(user);
+    }
+
+    @Override
+    public Integer deleteUsers2(Integer[] ids) {
+        return userMapper.deleteUsers(ids);
+    }*/
+    
+    
+    @Autowired
+    private UserMapperCommon userMapperCommon;
+
+    @Override
+    public EasyUiPageResult<User> queryAllUser(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Example example = new Example(User.class);
+        example.setOrderByClause("created desc");
+        List<User> users = userMapperCommon.selectByExample(example);
+        PageInfo<User> pageInfo = new PageInfo<>(users);
+        
+        EasyUiPageResult<User> easyuiPage = new EasyUiPageResult<>();
+        easyuiPage.setRows(users);
+        easyuiPage.setTotal(pageInfo.getTotal());
+        return easyuiPage;
+    }
+
+    @Override
+    public Integer saveUser(User user) {
+        user.setCreated(new Date());
+        user.setUpdated(new Date());
+        return userMapperCommon.insert(user);
+    }
+
+    @Override
+    public Integer deleteUsers(String ids) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Integer updateUserByUserId(User user) {
+        return userMapperCommon.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public Integer deleteUsers2(List<Object> ids) {
+        Example example = new Example(User.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andIn("id", ids);
+        
+        return userMapperCommon.deleteByExample(example);
     }
 
 
