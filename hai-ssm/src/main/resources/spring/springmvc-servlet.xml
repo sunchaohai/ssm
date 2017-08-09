@@ -42,14 +42,14 @@
 	<mvc:default-servlet-handler/>
 	
 	<!-- 拦截器配置 -->
-	<!-- <mvc:interceptors>
+	 <mvc:interceptors>
 		<mvc:interceptor>
-			path： 拦截所有请求
+			<!-- path： 拦截所有请求 -->
 			<mvc:mapping path="/**"/>
-			class：指定拦截器
+			<!-- class：指定拦截器 -->
 			<bean class="com.hai.chao.sun.interceptor.TokenInterceptor"/>
 		</mvc:interceptor>
-	</mvc:interceptors> -->
+	</mvc:interceptors>
 	
 
 </beans>

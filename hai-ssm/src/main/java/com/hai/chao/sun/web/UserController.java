@@ -50,9 +50,10 @@ public class UserController {
 
     @RequestMapping("/list")
     @ResponseBody
+    @Token(save=true)
     public EasyUiPageResult<User> listUser(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize) {
-        return userService.queryAllUser(pageNum, pageSize);
+            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize,HttpServletRequest request) {
+        return userService.queryAllUser(pageNum, pageSize,request);
     }
 
     /**
@@ -65,9 +66,9 @@ public class UserController {
     @RequestMapping("/export/excel")
     @ResponseBody
     public ModelAndView exportExcel(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize) {
+            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize,HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("excelView");
-        EasyUiPageResult<User> pageResult = userService.queryAllUser(pageNum, pageSize);
+        EasyUiPageResult<User> pageResult = userService.queryAllUser(pageNum, pageSize, request);
         List<User> users = pageResult.getRows();
         mv.addObject("userList", users);
 
@@ -82,7 +83,7 @@ public class UserController {
      */
     @RequestMapping("/save")
     @ResponseBody
-    @Token(save=true,remove=true)
+    @Token(remove=true)
     public Response saveuser(User user) {
         // 调用service保存用户
         try {
@@ -128,17 +129,11 @@ public class UserController {
     
     @RequestMapping("/edit")
     @ResponseBody
-    @Token(save=true)
-    public Response editUser(User user){
+    @Token(remove=true)
+    public Response editUser(User user,HttpServletRequest request){
         try{
-            String token = user.getToken();
-            if(StringUtils.isBlank(token)){
-                return Response.fail("token修改用户失败！");
-            }
-            String value = redisCache.get(token);
-            if(StringUtils.isBlank(value)){
-                return Response.fail("value修改用户失败！");
-            }
+            LOGGER.info("session值：{}",request.getSession().getAttribute("token"));
+           
             Integer count = userService.updateUserByUserId(user);
             if(count == 1){
                 return Response.success("修改用户成功！");

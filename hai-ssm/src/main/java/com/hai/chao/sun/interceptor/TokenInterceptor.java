@@ -10,13 +10,20 @@ import org.apache.log4j.Logger;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-
-public class TokenInterceptor extends HandlerInterceptorAdapter{
+/**
+ * 使用token的逻辑是，给所有的url加一个拦截器，在拦截器里面用java的UUID生成一个随机的UUID并把这个UUID放到session里面，
+ * 然后在浏览器做数据提交的时候将此UUID提交到服务器。服务器在接收到此UUID后，检查一下该UUID是否已经被提交，如果已经被提交，则不让逻辑继续执行下去…
+ * 
+ * @author xiaohai
+ *
+ */
+public class TokenInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOG = Logger.getLogger(Token.class);
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        if (handler instanceof HandlerMethod) {
+         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
             Token annotation = method.getAnnotation(Token.class);
@@ -28,7 +35,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter{
                 boolean needRemoveSession = annotation.remove();
                 if (needRemoveSession) {
                     if (isRepeatSubmit(request)) {
-                         LOG.warn("please don't repeat submit,url:"+ request.getServletPath());
+                        LOG.warn("please don't repeat submit,url:" + request.getServletPath());
                         return false;
                     }
                     request.getSession(true).removeAttribute("token");

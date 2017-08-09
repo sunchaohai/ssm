@@ -5,7 +5,10 @@
 	    <table cellpadding="5">
 	        <tr>
 	            <td>用户名:</td>
-	            <td><input class="easyui-textbox" type="text" name="userName" data-options="required:true" style="width: 280px;"></input></td>
+	            <td>
+	            	<input type="hidden" id="addhiddenToken" name="token" />
+	            	<input class="easyui-textbox" type="text" name="userName" data-options="required:true" style="width: 280px;"></input>
+	            </td>
 	        </tr>
 	        <tr>
 	            <td>密码:</td>
@@ -46,6 +49,7 @@
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
 		}
+		$("#addhiddenToken").val(token);
 		$.post("/user/save",$("#content").serialize(), function(data){
 			if(data.status == 1){
 				$.messager.alert('提示',data.msg);

@@ -19,6 +19,7 @@
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
+	        	<th data-options="field:'token',formatter:formatToken"></th>
 	        	<th data-options="field:'id',width:60">ID</th>
 	            <th data-options="field:'userName',width:200">用户名</th>
 	            <th data-options="field:'name',width:100">姓名</th>
@@ -40,7 +41,7 @@
 	        <tr>
 	            <td>用户名:</td>
 	            <td>
-	            	<input type="hidden" name="token" value="12345" />
+	            	<input type="hidden" id="hiddenToken" name="token" />
 		          	<input type="hidden" id="editId" name="id"/> 
 	            	<input class="easyui-textbox" type="text" id="editUserName" name="userName" data-options="required:true" style="width: 280px;"></input>
 	            </td>
@@ -96,6 +97,10 @@ function formatSet(val,row){
 		return "未知";
 	}
 }
+var token;
+function formatToken(val,row){
+	token = val;
+}
 function getSelectionsIds(){
 	var userList = $("#userList");
 	var sels = userList.datagrid("getSelections");
@@ -104,6 +109,7 @@ function getSelectionsIds(){
 		ids.push(sels[i].id);
 	}
 	ids = ids.join(",");
+	
 	return ids;
 }
 function getRowDate(){
@@ -121,17 +127,17 @@ var toolbar = [{
     text:'编辑',
     iconCls:'icon-edit',
     handler:function(){
+    	debugger;
     	var ids = getSelectionsIds();
-    	if(ids.length == 0 || ids.length >1){
+    	ids = new Array(ids);
+    	if(ids.length == 0 || ids.length>1){
     		$.messager.alert('提示','请选择一个用户!');
     		return ;
     	}
-    	
     	var data = getRowDate();
-    	console.log(data);
     	$('#userEdit').window('open');
-		debugger;
     	$("#editId").val(data.id);
+    	$("#hiddenToken").val(token);
     	$("#editUserName").textbox("setValue",data.userName);
     	$("#editName").textbox("setValue",data.name);
     	$("#editAge").numberbox("setValue",data.age);
@@ -143,7 +149,6 @@ var toolbar = [{
     iconCls:'icon-cancel',
     handler:function(){
     	var ids = getSelectionsIds();
-    	console.log(ids);
     	if(ids.length == 0){
     		$.messager.alert('提示','未选中用户!');
     		return ;
@@ -179,11 +184,11 @@ var toolbar = [{
     }
 }];
 
-// var checkSubmit = false;
+var checkSubmit = false;
 function submitForm(){
-// 	if(checkSubmit){
-// 		return;
-// 	}
+	if(checkSubmit){
+		return;
+	}
 	if(!$('#editContent').form('validate')){
 		$.messager.alert('提示','表单还未填写完成!');
 		return ;
@@ -198,7 +203,7 @@ function submitForm(){
 			$.messager.alert('提示',data.msg);
 		}
 	});
-	//checkSubmit = true;
+	checkSubmit = true;
 }
 function clearForm(){
 	$('#editContent').form('reset');

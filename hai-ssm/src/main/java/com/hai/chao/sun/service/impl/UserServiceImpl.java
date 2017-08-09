@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.parsing.ParsingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,11 +81,15 @@ public class UserServiceImpl implements UserService{
     private UserMapperCommon userMapperCommon;
 
     @Override
-    public EasyUiPageResult<User> queryAllUser(Integer pageNum, Integer pageSize) {
+    public EasyUiPageResult<User> queryAllUser(Integer pageNum, Integer pageSize,HttpServletRequest request) {
         PageHelper.startPage(pageNum, pageSize);
         Example example = new Example(User.class);
         example.setOrderByClause("created desc");
         List<User> users = userMapperCommon.selectByExample(example);
+        for (User user : users) {
+            user.setToken((String)request.getSession().getAttribute("token"));
+        }
+        
         PageInfo<User> pageInfo = new PageInfo<>(users);
         
         EasyUiPageResult<User> easyuiPage = new EasyUiPageResult<>();
