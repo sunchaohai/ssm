@@ -107,6 +107,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Integer updateUserByUserId(User user) {
+        user.setUpdated(new Date());
         return userMapperCommon.updateByPrimaryKeySelective(user);
     }
 

@@ -1,9 +1,10 @@
 package com.hai.chao.sun.web;
 
-import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hai.chao.sun.common.Response;
+import com.hai.chao.sun.interceptor.Token;
 import com.hai.chao.sun.pojo.User;
 import com.hai.chao.sun.service.UserService;
 import com.hai.chao.sun.vo.EasyUiPageResult;
@@ -28,6 +30,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    Map<String,String> redisCache = new HashMap<String,String>();
+    
+    {
+        redisCache.put("12345", "1");
+    }
 
     /**
      * 通用页面跳转
@@ -74,6 +82,7 @@ public class UserController {
      */
     @RequestMapping("/save")
     @ResponseBody
+    @Token(save=true,remove=true)
     public Response saveuser(User user) {
         // 调用service保存用户
         try {
@@ -97,7 +106,7 @@ public class UserController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Response deleteUser(@RequestParam("ids") String ids) {
+    public Response saveuser(@RequestParam("ids") String ids) {
         try {
             //ids = URLDecoder.decode(ids, "iso8859-1");
             LOGGER.info("用户ids:{}", ids);
@@ -117,51 +126,19 @@ public class UserController {
         }
     }
     
-    /*@RequestMapping("/delete2")
-    @ResponseBody
-    public Response deleteUser2(@RequestParam("ids") Integer[] ids) {
-        try {
-            //ids = URLDecoder.decode(ids, "iso8859-1");
-            LOGGER.info("用户ids:{}", Arrays.toString(ids));
-            if (ids.length == 0 || ids == null) {
-                return Response.fail("参数有误！");
-            }
-           
-            Integer count = userService.deleteUsers2(ids);
-            if (count > 0) {
-                return Response.success("删除用户成功！");
-            } else {
-                return Response.fail("删除用户失败！");
-            }
-        } catch (Exception e) {
-            LOGGER.error("删除用户失败", e);
-            return Response.fail("删除用户失败！");
-        }
-    }*/
-    @RequestMapping("/delete2")
-    @ResponseBody
-    public Response deleteUser2(@RequestParam("ids") List<Object> ids) {
-        try {
-            if (ids.size() == 0 || ids == null) {
-                return Response.fail("参数有误！");
-            }
-           
-            Integer count = userService.deleteUsers2(ids);
-            if (count > 0) {
-                return Response.success("删除用户成功！");
-            } else {
-                return Response.fail("删除用户失败！");
-            }
-        } catch (Exception e) {
-            LOGGER.error("删除用户失败", e);
-            return Response.fail("删除用户失败！");
-        }
-    }
-    
     @RequestMapping("/edit")
     @ResponseBody
+    @Token(save=true)
     public Response editUser(User user){
         try{
+            String token = user.getToken();
+            if(StringUtils.isBlank(token)){
+                return Response.fail("token修改用户失败！");
+            }
+            String value = redisCache.get(token);
+            if(StringUtils.isBlank(value)){
+                return Response.fail("value修改用户失败！");
+            }
             Integer count = userService.updateUserByUserId(user);
             if(count == 1){
                 return Response.success("修改用户成功！");

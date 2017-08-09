@@ -40,6 +40,7 @@
 	        <tr>
 	            <td>用户名:</td>
 	            <td>
+	            	<input type="hidden" name="token" value="12345" />
 		          	<input type="hidden" id="editId" name="id"/> 
 	            	<input class="easyui-textbox" type="text" id="editUserName" name="userName" data-options="required:true" style="width: 280px;"></input>
 	            </td>
@@ -178,11 +179,11 @@ var toolbar = [{
     }
 }];
 
-var checkSubmit = false;
+// var checkSubmit = false;
 function submitForm(){
-	if(checkSubmit){
-		return;
-	}
+// 	if(checkSubmit){
+// 		return;
+// 	}
 	if(!$('#editContent').form('validate')){
 		$.messager.alert('提示','表单还未填写完成!');
 		return ;
@@ -197,7 +198,7 @@ function submitForm(){
 			$.messager.alert('提示',data.msg);
 		}
 	});
-	checkSubmit = true;
+	//checkSubmit = true;
 }
 function clearForm(){
 	$('#editContent').form('reset');
