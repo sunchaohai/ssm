@@ -127,9 +127,8 @@ var toolbar = [{
     text:'编辑',
     iconCls:'icon-edit',
     handler:function(){
-    	debugger;
     	var ids = getSelectionsIds();
-    	ids = new Array(ids);
+    	ids = ids.split(","); 
     	if(ids.length == 0 || ids.length>1){
     		$.messager.alert('提示','请选择一个用户!');
     		return ;
