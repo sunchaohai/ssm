@@ -1,7 +1,10 @@
 package com.hai.chao.sun.web;
 
-import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hai.chao.sun.common.Response;
+import com.hai.chao.sun.interceptor.Token;
 import com.hai.chao.sun.pojo.User;
 import com.hai.chao.sun.service.UserService;
 import com.hai.chao.sun.vo.EasyUiPageResult;
@@ -26,6 +30,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    Map<String,String> redisCache = new HashMap<String,String>();
+    
+    {
+        redisCache.put("12345", "1");
+    }
 
     /**
      * 通用页面跳转
@@ -40,9 +50,10 @@ public class UserController {
 
     @RequestMapping("/list")
     @ResponseBody
+    @Token(save=true)
     public EasyUiPageResult<User> listUser(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize) {
-        return userService.queryAllUser(pageNum, pageSize);
+            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize,HttpServletRequest request) {
+        return userService.queryAllUser(pageNum, pageSize,request);
     }
 
     /**
@@ -55,9 +66,9 @@ public class UserController {
     @RequestMapping("/export/excel")
     @ResponseBody
     public ModelAndView exportExcel(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize) {
+            @RequestParam(value = "rows", defaultValue = "5") Integer pageSize,HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("excelView");
-        EasyUiPageResult<User> pageResult = userService.queryAllUser(pageNum, pageSize);
+        EasyUiPageResult<User> pageResult = userService.queryAllUser(pageNum, pageSize, request);
         List<User> users = pageResult.getRows();
         mv.addObject("userList", users);
 
@@ -72,6 +83,7 @@ public class UserController {
      */
     @RequestMapping("/save")
     @ResponseBody
+    @Token(remove=true)
     public Response saveuser(User user) {
         // 调用service保存用户
         try {
@@ -117,8 +129,11 @@ public class UserController {
     
     @RequestMapping("/edit")
     @ResponseBody
-    public Response editUser(User user){
+    @Token(remove=true)
+    public Response editUser(User user,HttpServletRequest request){
         try{
+            LOGGER.info("session值：{}",request.getSession().getAttribute("token"));
+           
             Integer count = userService.updateUserByUserId(user);
             if(count == 1){
                 return Response.success("修改用户成功！");

@@ -2,6 +2,8 @@ package com.hai.chao.sun.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.hai.chao.sun.pojo.User;
 import com.hai.chao.sun.vo.EasyUiPageResult;
 
@@ -9,11 +11,12 @@ public interface UserService {
 
     /**
      * 分页查询用户
+     * @param request 
      * @param pageNum页码
      * @param pageSize每页显示条数
      * @return
      */
-    public EasyUiPageResult<User> queryAllUser(Integer pageNum, Integer pageSize);
+    public EasyUiPageResult<User> queryAllUser(Integer pageNum, Integer pageSize, HttpServletRequest request);
 
     /**
      * 保存用户
@@ -35,6 +38,9 @@ public interface UserService {
      * @return
      */
     public Integer updateUserByUserId(User user);
+
+//    public Integer deleteUsers2(Integer[] ids);
+    public Integer deleteUsers2(List<Object> ids);
 
 
 }

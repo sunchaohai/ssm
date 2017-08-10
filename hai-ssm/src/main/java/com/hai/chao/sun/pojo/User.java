@@ -2,13 +2,21 @@ package com.hai.chao.sun.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Table(name = "tb_user")
 public class User {
+    @Id
     private Integer id;
 
+    @Column(name = "user_name")
     private String userName;
 
     private String name;
@@ -26,6 +34,9 @@ public class User {
 
     @JsonIgnore // 转换成json时，忽略该属性内容
     private String password;
+    
+    @Transient
+    private String token;
 
     public Integer getId() {
         return id;
@@ -97,6 +108,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
